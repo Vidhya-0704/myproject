@@ -42,13 +42,12 @@ jobs:
         version: 'v1.33.4'  # k3s compatible version
 
     - name: Create kubeconfig file from secret
-      run: |
-        echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig.yaml
+  run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig.yaml
 
-    - name: Deploy to Kubernetes
-      env:
-        KUBECONFIG: ${{ github.workspace }}/kubeconfig.yaml
-      run: |
-        kubectl apply -f ./wisecow-deployment.yaml
-        kubectl apply -f ./wisecow-service.yaml
+- name: Deploy to Kubernetes
+  env:
+    KUBECONFIG: ${{ github.workspace }}/kubeconfig.yaml
+  run: |
+    kubectl apply -f ./wisecow-deployment.yaml
+    kubectl apply -f ./wisecow-service.yaml
 

@@ -37,8 +37,8 @@ jobs:
       with:
         version: 'v1.33.4'  # k3s compatible version
 
-    - name: Set kubeconfig
-      run: echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+    - name: Decode and set kubeconfig
+      run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig.yaml
 
     - name: Deploy to Kubernetes
       env:

@@ -44,6 +44,6 @@ jobs:
       env:
         KUBECONFIG: ${{ github.workspace }}/kubeconfig.yaml
       run: |
-        kubectl apply -f wisecow-deployment.yaml
+        kubectl apply -f ./wisecow-deployment.yaml
         kubectl apply -f wisecow-service.yaml
 

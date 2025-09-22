@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # or your default branch
+      - master  # your default branch
 
 jobs:
   build-and-push:
@@ -46,3 +46,4 @@ jobs:
       run: |
         kubectl apply -f wisecow-deployment.yaml
         kubectl apply -f wisecow-service.yaml
+

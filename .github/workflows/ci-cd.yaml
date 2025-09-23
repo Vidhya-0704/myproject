@@ -10,43 +10,45 @@ jobs:
     runs-on: self-hosted  # your EC2 is the runner
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v4
-      with:
-        push: true
-        tags: vidhyasri707/wisecow-app:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: vidhyasri707/wisecow-app:latest
 
   deploy-to-kubernetes:
     runs-on: self-hosted
     needs: build-and-push
+    env:
+      KUBECONFIG: /home/ubuntu/.kube/config  # Adjust path to your runner user's kubeconfig
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Update deployment with new Docker image
-      run: |
-        # Update image in deployment YAML dynamically (optional)
-        sed -i 's|image: .*|image: vidhyasri707/wisecow-app:latest|' wisecow-deployment.yaml
+      - name: Update deployment with new Docker image
+        run: |
+          # Update image in deployment YAML dynamically (optional)
+          sed -i 's|image: .*|image: vidhyasri707/wisecow-app:latest|' wisecow-deployment.yaml
 
-        # Apply deployment and service
-        kubectl apply -f wisecow-deployment.yaml
-        kubectl apply -f wisecow-service.yaml
+          # Apply deployment and service
+          kubectl apply -f wisecow-deployment.yaml
+          kubectl apply -f wisecow-service.yaml
 
-    - name: Verify Deployment
-      run: |
-        kubectl get pods -o wide
-        kubectl get svc
+      - name: Verify Deployment
+        run: |
+          kubectl get pods -o wide
+          kubectl get svc
 

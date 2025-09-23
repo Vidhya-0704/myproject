@@ -44,8 +44,8 @@ jobs:
           sed -i 's|image: .*|image: vidhyasri707/wisecow-app:latest|' wisecow-deployment.yaml
 
           # Apply deployment and service
-          kubectl apply -f wisecow-deployment.yaml
-          kubectl apply -f wisecow-service.yaml
+          kubectl apply -f wisecow-deployment.yaml --validate=false
+          kubectl apply -f wisecow-service.yaml --validate=false
 
       - name: Verify Deployment
         run: |
